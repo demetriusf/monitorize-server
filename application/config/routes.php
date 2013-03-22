@@ -39,6 +39,7 @@
 */
 
 $route['default_controller'] = "inicial";
+$route['webservice/user(.*)'] = "webservice/user/user_op$1";
 $route['404_override'] = '';
 
 
