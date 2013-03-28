@@ -10,7 +10,7 @@ class Authentication extends REST_Controller {
 		$email = addslashes($this -> post('email'));
 		$pwd = addslashes($this -> post('pwd'));
 		
-		if( !empty($email) && !empty($pwd) && valid_email($email)){
+		if( valid_email($email)  && !empty($pwd) ){
 		
 			$this -> db -> get_where('users', array("email"=>$email, "pwd"=> $pwd) );
 					
@@ -26,7 +26,7 @@ class Authentication extends REST_Controller {
 		}		
 		
 	}	
-	
+
 	
 }
 

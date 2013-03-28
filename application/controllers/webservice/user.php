@@ -9,7 +9,7 @@ class User extends REST_Controller{
 		$email = $this -> put('email');
 		$pwd = $this -> put('pwd');
 
-		if( !empty($email) && !empty($pwd) && valid_email($email) ){
+		if( valid_email($email) && !empty($pwd) ){
 
 			$this -> db -> insert('users', array('email'=>$email, 'pwd'=>$pwd));
 
