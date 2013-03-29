@@ -41,7 +41,7 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'www.asccode.com:3306';
+$db['default']['hostname'] = 'www.asccode.com';
 $db['default']['username'] = 'ascco190_sw';
 $db['default']['password'] = '123abc';
 $db['default']['database'] = 'ascco190_sites_watch';
