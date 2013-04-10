@@ -19,3 +19,4 @@ $config["ftp_path"] = "/www/";
 
 //*****Configuraçoes de segurança
 $config["name_session_member"] = "_restrict";
+$config["token_magic_key"] = "5I735_W47CH~";
