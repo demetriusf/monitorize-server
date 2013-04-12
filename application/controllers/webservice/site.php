@@ -46,5 +46,13 @@ class Site extends REST_Controller{
 					
 	}	
 	
+	public function site_op_get(){
+		
+		$arrayDeSites = $this -> db -> select("id, name, url, receiveNotification, optPing", 1)->from("sites")->get()->result_array();	
+		
+		$this -> response($arrayDeSites, 200);
+		
+	}
+	
 	
 }
