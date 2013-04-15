@@ -11,8 +11,8 @@ class Site extends REST_Controller{
 		
 		$idUser = 0;
 		$name = $jsonSite['name'];
-		$url =  $jsonSite['url'];
-		$receiveNotification = (boolean) $jsonSite['receiveNotification']; 
+		$endereco =  $jsonSite['endereco'];
+		$receiveAndroidNotification = (boolean) $jsonSite['receiveAndroidNotification']; 
 		$optPing = (boolean) $jsonSite['optPing'];
 		
 		$token_magic_key = get_token_magic_key();
@@ -21,23 +21,33 @@ class Site extends REST_Controller{
 		
 		$consultaUser = $this -> db -> get_where( 'users', array( "MD5(email)"=>$realToken ), 1 );
 		
-		if( !empty($name) && filter_var($url, FILTER_VALIDATE_URL) !== FALSE && $this -> db -> affected_rows() == 1 ){
+		if( !empty($name) && (filter_var($endereco, FILTER_VALIDATE_URL) !== FALSE || filter_var($endereco, FILTER_VALIDATE_IP) !== FALSE ) && $this -> db -> affected_rows() == 1 ){
 			
 			$idUser = $consultaUser->row(0)->id;				
-					
-			$this -> db -> insert('sites', array('id_user'=>$idUser, 'name'=> $name,'url' => $url, 'receiveNotification'=>$receiveNotification, 'optPing'=>$optPing) );
 
-			if( $this -> db -> affected_rows() == 1 ){
-				
-				$this -> response(array('feedback'=>'true') , 200);				
-				
-			}else{
-				
-				$this -> response(array('feedback'=>'false') , 200);
-					
-			}
+			$linhas = $this -> db -> select("COUNT(*) as total")->from("sites")->where( array("id_user"=>$idUser, "endereco"=>$endereco) )->get();
+			$total = $linhas -> row(0)->total;
 			
-					
+			if( $total == "0" ){
+				
+				$this -> db -> insert('sites', array('id_user'=>$idUser, 'name'=> $name,'endereco' => $endereco, 'receiveAndroidNotification'=>$receiveAndroidNotification, 'optPing'=>$optPing) );
+				
+				if( $this -> db -> affected_rows() == 1 ){
+				
+					$this -> response(array('feedback'=>'true') , 200);
+				
+				}else{
+				
+					$this -> response(array('feedback'=>'false') , 200);
+						
+				}
+				
+			}else{ // Já existe esse site.
+				
+				$this -> response(array('feedback'=>'false') , 200);				
+				
+			}
+				
 		}else{
 					
 			$this -> response(array('feedback'=>'false'), 200);
@@ -48,10 +58,34 @@ class Site extends REST_Controller{
 	
 	public function site_op_get(){
 		
-		$arrayDeSites = $this -> db -> select("id, name, url, receiveNotification, optPing", 1)->from("sites")->get()->result_array();	
+		$loginUserToken = addslashes( $this -> get('loginUserToken') );
+		
+		$token_magic_key = get_token_magic_key();
+		
+		$realToken = str_replace($token_magic_key, '', $loginUserToken);		
+		
+		$arrayDeSites = $this -> db -> select("sites.id, sites.name, sites.endereco, sites.receiveAndroidNotification, sites.optPing", 1)->from("sites")->join('users', 'sites.id_user=users.id')->where(array('MD5(users.email)'=>$realToken))->get()->result_array();	
 		
 		$this -> response($arrayDeSites, 200);
 		
+	}
+	
+	public function site_op_delete(){
+	
+		$identifier = $this -> get('identifier');
+	
+		$this -> db -> delete('sites', array( 'MD5(id)'=>$identifier ) );
+		
+		if( $this -> db -> affected_rows() == 1 ){
+			
+			$this -> response(array('feedback'=>'true') , 200);				
+			
+		}else{
+			
+			$this -> response(array('feedback'=>'false'), 200);
+							
+		}
+			
 	}
 	
 	
