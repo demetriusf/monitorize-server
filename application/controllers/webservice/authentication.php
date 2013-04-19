@@ -29,7 +29,7 @@ class Authentication extends REST_Controller {
 		
 		}else{
 		
-			$this->response(array('feedback'=> 'a'), 200);
+			$this->response(array('feedback'=> ''), 200);
 		
 		}		
 		
