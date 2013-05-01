@@ -3,6 +3,14 @@
 require_once(APPPATH."/libraries/REST_Controller.php");
 
 class Gcm extends REST_Controller{
+	
+	public function __construct(){
+		
+		parent::__construct();
+		
+		$this -> load -> model('UserDao');
+		
+	}
 
 	public function gcm_op_put(){ // Register Android Device
 		
@@ -14,16 +22,40 @@ class Gcm extends REST_Controller{
 			$regId = addslashes($regId);
 			$loginUserToken = addslashes($loginUserToken);
 			
-			$this -> db-> insert("gcm_keys", array("regId"=>$regId, "loginUserToken"=>$loginUserToken));
+			$idUser = $this -> UserDao -> getUserIdByToken($loginUserToken);
 			
-			if( $this -> db -> affected_rows() == 1 ){
+			if( !empty($idUser) ){
+
+				$contentValues = array("regId"=>$regId, "id_user"=>$idUser);
+					
+				$this -> db -> get_where("gcm_keys", $contentValues );
+					
+				if( $this -> db -> affected_rows() == 0 ){
 				
-				$this -> response(array("feedback"=>"true"), NULL);				
+					// Delete other devices first
+					$this -> db -> delete("gcm_keys", array( "regId"=>$regId ) );
 				
+					$this -> db-> insert("gcm_keys", array("regId"=>$regId, "id_user"=>$idUser));
+						
+					if( $this -> db -> affected_rows() == 1 ){
+				
+						$this -> response(array("feedback"=>"true"), NULL);
+				
+					}else{
+				
+						$this -> response(array("feedback"=>"false"), NULL);
+				
+					}
+				
+				}else{
+				
+					$this -> response(array("feedback"=>"true"), NULL);
+				
+				}	
 			}else{
-				
-				$this -> response(array("feedback"=>"false"), NULL);				
-				
+			
+				$this -> response(array("feedback"=>"false"), NULL);
+			
 			}
 			
 		}else{
@@ -36,8 +68,30 @@ class Gcm extends REST_Controller{
 	
 	public function gcm_op_delete(){ // Remove Android Device
 	
+		$regId =  $this -> get('regId') ;	
 	
-	
+		if( !empty($regId) ){
+			
+			$regId = addslashes($regId);
+			
+			$this -> db -> delete( "gcm_keys", array("regId"=>$regId) );
+			
+			if( $this -> db -> affected_rows() == 1 ){
+
+				$this -> response(array("feedback"=>"true"), NULL);
+				
+			}else{
+				
+				$this -> response(array("feedback"=>"false"), NULL);
+				
+			}
+			
+		}else{
+			
+			$this -> response(array("feedback"=>"false"), NULL);	
+			
+		}
+		
 	}	
 	
 }
