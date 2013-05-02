@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if( !defined('BASEPATH') ) exit('No direct script access allowed');
 
 require_once(APPPATH."/libraries/REST_Controller.php");
 
@@ -13,11 +13,11 @@ class Gcm extends REST_Controller{
 	}
 
 	public function gcm_op_put(){ // Register Android Device
-		
+
 		$regId =  $this -> put('regId') ;	
 		$loginUserToken =  $this -> put('loginUserToken');	
 		
-		if( !empty($regId) && !empty( $loginUserToken )  ){
+ 		if( !empty($regId) && !empty( $loginUserToken )  ){
 
 			$regId = addslashes($regId);
 			$loginUserToken = addslashes($loginUserToken);
