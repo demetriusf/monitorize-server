@@ -80,7 +80,7 @@ $autoload['helper'] = array('url', 'html', 'form', 'email', 'support_helper');
 |
 */
 
-$autoload['config'] = array('seo', 'settings');
+$autoload['config'] = array();
 
 
 /*
@@ -96,7 +96,7 @@ $autoload['config'] = array('seo', 'settings');
 |
 */
 
-$autoload['language'] = array('fale_conosco');
+$autoload['language'] = array();
 
 
 /*

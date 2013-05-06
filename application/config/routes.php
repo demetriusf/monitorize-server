@@ -43,6 +43,10 @@ $route['webservice/user(.*)'] = "webservice/user/user_op$1";
 $route['webservice/site(.*)'] = "webservice/site/site_op$1";
 $route['webservice/gcm(.*)'] = "webservice/gcm/gcm_op$1";
 $route['webservice/auth/(.*)'] = "webservice/authentication/$1";
+
+/*OVERRIDE ADMIN*/
+$route['admin$'] = "admin/login";
+
 $route['404_override'] = '';
 
 

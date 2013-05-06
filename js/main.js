@@ -1,1 +1,5 @@
-$(function(){$.root=$(document);var $sliderInicial=$.root.find('.slider-inicial');$sliderInicial.anythingSlider({autoPlay:false,autoPlayLocked:true,autoPlayDelayed:false,hashTags:false,buildNavigation:false,buildStartStop:false,delayBeforeAnimate:0,enableKeyboard:true,delay:4000});var $containerSelector=$('.listagem-de-posts');$containerSelector.isotope({itemSelector:'.post-resumo',layoutMode:'centerAlign', centerAlign: {marginTop: 35}});$containerSelector.isotope('reLayout');});
+$(function() {
+
+	$.root = $(document);
+
+});
