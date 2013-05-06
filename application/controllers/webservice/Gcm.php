@@ -7,9 +7,7 @@ class Gcm extends REST_Controller{
 	public function __construct(){
 		
 		parent::__construct();
-		
-		$this -> load -> model('UserDao');
-		
+				
 	}
 
 	public function gcm_op_put(){ // Register Android Device
