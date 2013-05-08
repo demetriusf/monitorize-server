@@ -12,22 +12,26 @@ class Demo_cron extends CI_Controller{
 		
 		set_time_limit(7200); // 2 horas
 		
+		$messages = array();
+		
 		$selTodosDevices = $this -> db -> get_where('sites', array('optPing'=>'1') );
-		
-		$android_devices_id = array();
-		
+				
 		if( $this -> db ->affected_rows() > 0 ){
+						
+			$resURL = curl_init();
+			curl_setopt($resURL, CURLOPT_BINARYTRANSFER, 1);
+			curl_setopt($resURL, CURLOPT_FAILONERROR, 1);
+			curl_setopt($resURL, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($resURL, CURLOPT_FOLLOWLOCATION, 1);
 			
 			foreach( $selTodosDevices->result() as $sites ){
 					
 				$errorNo = 0;
 				$errorStr = "";
 				
-				$sites->endereco = str_replace('http://', '', $sites->endereco);
-				
-				$fp = @fsockopen( $sites->endereco, 80, $errorNo, $errorStr, 2 );			
-								
-				if( !$fp ){ // Erro
+				$android_devices_id = array();
+																
+				if( !$this->ping($sites->endereco, $resURL) ){ // Erro
 					
 					if( $sites->receiveAndroidNotification == 1 ){
 						
@@ -41,7 +45,7 @@ class Demo_cron extends CI_Controller{
 								
 							}
 							
-							
+							$messages[] = array( $android_devices_id, $sites->name );
 						}
 						
 												
@@ -49,18 +53,30 @@ class Demo_cron extends CI_Controller{
 					
 				}
 				
-			}			
+			}	
+
+			curl_close ($resURL);				
 			
 		}
 		
-		$android_devices_id = array_unique($android_devices_id);
+		$this -> sendMesage($messages);
 		
+	}
+	
+	private function ping($url, $resource){
+		
+		curl_setopt($resource, CURLOPT_URL, $url);		
+		curl_exec($resource);
+	
+		$intReturnCode = curl_getinfo($resource, CURLINFO_HTTP_CODE);
+				
+		return !($intReturnCode != 200 && $intReturnCode != 302 && $intReturnCode != 304 && $intReturnCode != 301);
+	
+	}
+	
+	private function sendMesage( $messages ){		
+			
 		$url = 'https://android.googleapis.com/gcm/send';
-		
-		$fields = array(
-				'registration_ids' => $android_devices_id,
-				'data' => array("message"=>"Seu teste de ping falhou. Seu site está offline ou lento!"),
-		);
 		
 		$headers = array(
 				'Authorization: key=AIzaSyBXw3owjLk1gUDjIxKidsGW3S1DaOn7JKM',
@@ -80,19 +96,22 @@ class Demo_cron extends CI_Controller{
 		// Disabling SSL Certificate support temporarly
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		
-		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-		
-		// Execute post
-		$result = curl_exec($ch);
-		if ($result === FALSE) {
-		
-			// Envia e-mail para o suporte.
-			mail('suporte.siteswatch@asccode.com', 'Error Cronjob', 'Ocorreu um erro na função CURL do script demo de cronjob!');
+		foreach( $messages as $k => $message ){
+						
+			$fields = array(
+					'registration_ids' => $message[0],
+					'data' => array("message"=>"O ping falhou para o site ".$message[1]),
+			);			
+			
+			curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields) ); // json or build_query
+			
+			// Execute post
+			$result = curl_exec($ch);
 			
 		}
 		
-		curl_close($ch);		
+		curl_close($ch);	
 		
 	}
-	
+		
 }
