@@ -1,5 +1,5 @@
     
-Sytes Watch gives notification when the something is broken in the Website	
+Monitorize gives notification when the something is broken in the Website	
 Copyright (C) 2013  Demetrius F. Campos
 
 This program is free software: you can redistribute it and/or modify

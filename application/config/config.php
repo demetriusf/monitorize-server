@@ -12,7 +12,7 @@ if (! defined ( 'BASEPATH' ))
  * CodeIgniter will guess the protocol, domain and | path to your installation.
  * |
  */
-$config ['base_url'] = 'http://localhost/sites-watch-server/';
+$config ['base_url'] = 'http://localhost/monitorize-server/';
 
 /*
  * |-------------------------------------------------------------------------- |
