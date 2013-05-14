@@ -1,5 +1,5 @@
 <?php
 
-$config["quem_somos"] = "Quem somos";
+$config ["quem_somos"] = "Quem somos";
 
 ?>

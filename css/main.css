@@ -38,12 +38,29 @@ table {
 }
 
 /*containers*/
-.container{max-width:1001px;margin:auto;}
+.container {
+	max-width: 1001px;
+	margin: auto;
+}
 
-.legend-one{padding:1%;background:#60d1a5;border-radius:5px;}
+.legend-one {
+	padding: 1%;
+	background: #60d1a5;
+	border-radius: 5px;
+}
 
 /*boxes*/
-.box-one{padding:3%;background:#628787;position:relative;opacity:.5;border-radius:15px;box-shadow:0px 0px 5px #666;}
+.box-one {
+	padding: 3%;
+	background: #628787;
+	position: relative;
+	opacity: .5;
+	border-radius: 15px;
+	box-shadow: 0px 0px 5px #666;
+}
 
 /*sections*/
-.section-login{margin:auto;width:30%;}
+.section-login {
+	margin: auto;
+	width: 30%;
+}

@@ -1,16 +1,19 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
-class Inicial extends CI_Controller{
+if (! defined ( 'BASEPATH' ))
+	exit ( 'No direct script access allowed' );
 
-	public function __construct(){
-
-		parent::__construct();
+class Inicial extends CI_Controller {
+	
+	public function __construct() {
 		
+		parent::__construct ();
+	
 	}
-
-	public function index(){
-
-		$this->load->view('inicial');
+	
+	public function index() {
+		
+		$this->load->view ( 'inicial' );
 	
 	}
 

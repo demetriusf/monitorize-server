@@ -1,20 +1,26 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
-class Login extends CI_Controller{
+if (! defined ( 'BASEPATH' ))
+	exit ( 'No direct script access allowed' );
+
+class Login extends CI_Controller {
 	
-	public function __construct(){
+	public function __construct() {
 		
-		parent::__construct();
-		
+		parent::__construct ();
+	
 	}
 	
-	public function index(){
+	public function index() {
 		
-		$this -> load -> view('admin/header');
-		$this -> load -> view('admin/form_login');
-		$this -> load -> view('admin/footer');
-		
+		$this->load->view ( 'admin/header' );
+		$this->load->view ( 'admin/form_login' );
+		$this->load->view ( 'admin/footer' );
+	
 	}
 	
+	public function action_logar() {
 	
+	}
+
 }
